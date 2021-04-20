@@ -3,14 +3,14 @@ import { Button, FormControl, InputLabel, Input } from '@material-ui/core';
 import Todo from './Todo.js';
 import './App.css';
 import db from './firebase.js';
-
+import firebase from 'firebase'
 function App() {
   const [todos, setTodos] = React.useState([]);
   const [input, setInput] = React.useState('');
   
   // when the app loads, listen to database and fetch new todos as they get added or removed
   React.useEffect(() => {
-    db.collection('todos').onSnapshot(snapshot => {
+    db.collection('todos').orderBy('timestamp', 'desc').onSnapshot(snapshot => {
       console.log('firebase', snapshot.docs.map(doc => doc.data().todo))
       setTodos(snapshot.docs.map(doc => doc.data().todo))
     })
@@ -20,6 +20,7 @@ function App() {
     event.preventDefault();
     db.collection('todos').add({
       todo: input,
+      timestamp: firebase.firestore.FieldValue.serverTimestamp()
     })
     setInput('');
   }
