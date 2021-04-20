@@ -11,8 +11,7 @@ function App() {
   // when the app loads, listen to database and fetch new todos as they get added or removed
   React.useEffect(() => {
     db.collection('todos').orderBy('timestamp', 'desc').onSnapshot(snapshot => {
-      console.log('firebase', snapshot.docs.map(doc => doc.data().todo))
-      setTodos(snapshot.docs.map(doc => doc.data().todo))
+      setTodos(snapshot.docs.map(doc => ({id: doc.id, todo: doc.data().todo})))
     })
   }, []);
 
