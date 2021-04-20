@@ -2,15 +2,25 @@ import React from 'react'
 import { Button, FormControl, InputLabel, Input } from '@material-ui/core';
 import Todo from './Todo.js';
 import './App.css';
+import db from './firebase.js';
 
 function App() {
-  const [todos, setTodos] = React.useState(['First task', 'Second task']);
+  const [todos, setTodos] = React.useState([]);
   const [input, setInput] = React.useState('');
   
+  // when the app loads, listen to database and fetch new todos as they get added or removed
+  React.useEffect(() => {
+    db.collection('todos').onSnapshot(snapshot => {
+      console.log('firebase', snapshot.docs.map(doc => doc.data().todo))
+      setTodos(snapshot.docs.map(doc => doc.data().todo))
+    })
+  }, []);
 
   const addTodo = function(event) {
     event.preventDefault();
-    setTodos([...todos, input]);
+    db.collection('todos').add({
+      todo: input,
+    })
     setInput('');
   }
 

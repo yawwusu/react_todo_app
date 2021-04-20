@@ -8,7 +8,7 @@ function Todo({todo}) {
                 <ListItemAvatar>
                     <Avatar />
                 </ListItemAvatar>
-                <ListItemText primary="Todo" secondary={todo} />
+                <ListItemText primary={todo} secondary="Due:..." />
             </ListItem>
         </List>
     )
